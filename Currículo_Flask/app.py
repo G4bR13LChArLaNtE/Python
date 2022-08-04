@@ -1,7 +1,6 @@
-from flask import Flask, render_template, request, url_for, redirect, jsonify, session as flask_session
-import flask
+from flask import Flask, render_template, request, redirect, jsonify, session as flask_session
 
-from sqlalchemy import create_engine, null
+from sqlalchemy import create_engine
 from sqlalchemy import Column, Integer, String, Text, DateTime, func
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session as sql_session
@@ -10,7 +9,6 @@ from datetime import datetime
 
 
 import os
-import time
 from dotenv import load_dotenv
 
 
