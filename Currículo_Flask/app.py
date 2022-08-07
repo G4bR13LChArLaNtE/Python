@@ -187,4 +187,4 @@ def erro():
 # Rodando o aplicativo:
 
 if __name__ == '__main__':
-    app.run(host= 'localhost', port= 9000, debug= True)
+    app.run(host= 'localhost', port= 9000)
