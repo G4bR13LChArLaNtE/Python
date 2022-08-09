@@ -1,9 +1,12 @@
+# Arquivo adivindo de modificações para transformar uma aplicação sqlite em postgresql.
+
 from flask import Flask, render_template, request, redirect, jsonify, session as flask_session
 
-from sqlalchemy import create_engine
 from sqlalchemy import Column, Integer, String, Text, DateTime, func
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session as sql_session
+
+import psycopg2
 
 from datetime import datetime
 
@@ -26,21 +29,26 @@ pessoa = {}
 
 # Banco de dados:
 
-engine = create_engine("sqlite:///mensagens.db?check_same_thread=False")
-connection = engine.connect()
+def conectar_db():
+    con = psycopg2.connect(host='localhost', database='mensagens', user='postgres', password='pgs2022')
+    return con
 
+Base = declarative_base(conectar_db())
 
-Base = declarative_base(engine)
+def criar_tb(sql):
+    con = conectar_db()
+    cur = con.cursor()
+    cur.execute(sql)
+    con.commit()
+    con.close()
 
-
-
-connection.execute("""CREATE TABLE IF NOT EXISTS MSG (
-                    ID INTEGER PRIMARY KEY,
-                    NOME VARCHAR(255) NOT NULL,
-                    END_EMAIL VARCHAR(255) NOT NULL,
-                    ASSUNTO VARCHAR(255) NOT NULL,
-                    MENSAGEM VARCHAR(500) NOT NULL,
-                    DT DATE NOT NULL)""")
+sql = '''CREATE TABLE IF NOT EXISTS MSG (
+                ID INTEGER PRIMARY KEY,
+                NOME VARCHAR(255) NOT NULL,
+                END_EMAIL VARCHAR(255) NOT NULL,
+                ASSUNTO VARCHAR(255) NOT NULL,
+                MENSAGEM VARCHAR(500) NOT NULL,
+                DT DATE NOT NULL)'''
 
 class Msg(Base):
     __tablename__ = 'MSG'
@@ -59,8 +67,35 @@ class Msg(Base):
         self.dt = dt
 
 
-# Rotas da parte de login:
+criar_tb(sql)
 
+
+def inserir_db(sql):
+    con = conectar_db()
+    cur = con.cursor()
+    try:
+        cur.execute(sql)
+        con.commit()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print("Error: %s" % error)
+        con.rollback()
+        cur.close()
+        return 1
+    cur.close()
+
+def consultar_db(sql):
+  con = conectar_db()
+  cur = con.cursor()
+  cur.execute(sql)
+  recset = cur.fetchall()
+  registros = []
+  for rec in recset:
+    registros.append(rec)
+  con.close()
+  return registros
+
+
+# Rotas da parte de login:
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -79,12 +114,13 @@ def login():
 
 @app.route('/tabela', methods=['GET'])
 def tabela():
-    session = sql_session()
+    sql = ''' select * from msg'''
     pessoas = []
     p = {}
-    result = session.query(Msg)
+    result = consultar_db(sql)
+    print(result)
     for i in result:
-            p = { "nome": i.nome, "email": i.end_email, "assunto": i.assunto, "mensagem": i.mensagem, "dt": i.dt}
+            p = { "nome": i[1], "email": i[2], "assunto": i[3], "mensagem": i[4], "dt": i[5]}
             pessoas.append(p)
     if 'usuario' in flask_session and len(pessoas) != 0:
         nome_user = ''
@@ -155,13 +191,12 @@ def contato():
 
 @app.route('/contato', methods=['POST'])
 def enviar():
-    session = sql_session()
     if request.method == 'POST':
         nome = request.form.get('nome')
         email = request.form.get('end_email')
         assunto = request.form.get('assunto')
         mensagem = request.form.get('mensagem')
-        dt = datetime.today()
+        dt = str(datetime.today())
 
         if (nome == '') or (email == '') or (assunto == '') or (mensagem == ''):
             try:
@@ -169,9 +204,11 @@ def enviar():
             except Exception as ex:
                 return jsonify({"status":"ERRO", "msg":str(ex)})
         else:
-           p = Msg(nome, email, assunto, mensagem, dt)
-           session.add(p)
-           session.commit()
+           sql = ''' 
+           INSERT into msg(nome, end_email, assunto, mensagem, dt)
+           values('{}', '{}', '{}', '{}', '{}');
+           '''.format( nome, email, assunto, mensagem, dt)
+           inserir_db(sql)
            return redirect("/sucesso", code=302)
 
 
@@ -188,3 +225,4 @@ def erro():
 
 if __name__ == '__main__':
     app.run(host= 'localhost', port= 9000)
+

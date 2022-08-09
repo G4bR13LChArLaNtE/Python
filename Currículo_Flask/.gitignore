@@ -2,5 +2,6 @@
 ds.py
 tabela1.css
 tabela1.html
-mensagens.db
 curriculo
+app_sqlite.py
+mensagens.db
