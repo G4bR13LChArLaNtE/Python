@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+    <head>
+        <meta charset="utf-8">
+        <title>Currículo Charlante</title>
+        <meta name="description" content="Meu currículo pessoal.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="../static/css/cont.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Sarala&display=swap" rel="stylesheet">
+        <link rel="shortcut icon" href="./CSS/curriculum-vitae.png"> 
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css">
+    </head>
+
+    <body>
+
+  <div class="parent">
+
+        <div class="sidebar">
+
+
+          <div class="sidebar-pos"></div>
+
+            <div class="img-sidebar">
+                  <img src="../static/gabriel-foto.jpeg" class="picture" alt="Foto Gabriel Charlante">
+            </div>
+
+            <div class="menu">
+                    <a href="index.html">Sobre</a>
+                    <a href="educacao.html">Educação</a>
+                    <a href="experiencia.html">Experiência</a>
+                    <a href="habilidades.html">Habilidades</a>
+                    <a href="interesse.html">Interesses</a>
+                    <a class="selected" href="contato.html">Contato</a>
+                    
+
+            </div><!--menu-->
+          </div><!--sidebar-pos-->
+
+        </div><!--sidebar-->
+
+       <main class="content">
+
+        <section class="descricao">
+
+
+                <form action="/contato" method="POST">
+
+
+                    <div class="form-group">
+
+                        <label for="nome1"><b>Nome</b></label><br>
+                        
+                        <input type="text" class="form-control1" id="nome1" name="nome" aria-describedby="nameHelp" placeholder="Seu nome, por favor!"> <br><br />
+      
+                      </div>
+
+                    <div class="form-group1">
+
+                      <label for="Email1"><b>Endereço de email</b></label><br>
+                      
+                      <input type="email" class="form-control1" id="email1" name="end_email" aria-describedby="emailHelp" placeholder="Seu email"><br><br />
+
+                    </div>
+
+
+                    <div class="form-group2">
+
+                      <label for="assunto1"><b>Assunto: </b></label><br>
+                      
+                      <input type="text" class="form-control1" id="assunto1" name="assunto" aria-describedby="nameHelp" placeholder="Sobre o quê iremos conversar?"> <br><br />
+
+                    </div>
+
+                    <div class="form-group3">
+
+                      <label class="lb" for="mensagem"><b>Enviar Mensagem</b></label>
+
+                      <textarea row="14" maxlength="750" type="text" class="form-control2" id="mensagem" placeholder="Sua Mensagem" name="mensagem"></textarea>
+
+                    </div><br/>
+                    
+                    <input id="btn-enviar" type="submit" value="Enviar" style="margin-top: 10px; font-weight: bold;">
+
+
+                  </form>
+
+            
+
+              <p><b>Localização:</b></p>
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7319.635277966894!2d-46.57843712487767!3d-23.46704158891906!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94cef5c09d7d5b9d%3A0xcaccaeaa2e1fa4b0!2sJardim%20Modelo%2C%20S%C3%A3o%20Paulo%20-%20SP!5e0!3m2!1spt-BR!2sbr!4v1646849280157!5m2!1spt-BR!2sbr" width="600" height="450" style="border:1px solid rgb(18, 98, 163);" allowfullscreen="" loading="lazy"></iframe><br><br />
+
+              </div><!--icons-contato-->
+
+
+        </section><!--descricao-->
+
+       </main><!--content-->
+
+  </div><!--parent-->
+          
+
+          <script src="static/scripts.js" defer></script>
+    </body>
+</html>
